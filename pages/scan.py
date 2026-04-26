@@ -9,7 +9,7 @@ from utils.scraper import get_latest_advisory
 import json
 
 def render_scan():
-    from app import render_header, render_bottom_nav
+    from utils.ui_helpers import render_header, render_bottom_nav
     render_header()
 
     st.markdown("### Select Crop")

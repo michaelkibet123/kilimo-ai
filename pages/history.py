@@ -4,7 +4,7 @@ from utils.preprocessor import format_disease_name
 from datetime import datetime, timezone
 
 def render_history():
-    from app import render_header, render_bottom_nav
+    from utils.ui_helpers import render_header, render_bottom_nav
     render_header()
 
     if not st.session_state.get('authenticated'):

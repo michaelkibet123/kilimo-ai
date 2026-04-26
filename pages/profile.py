@@ -2,7 +2,7 @@ import streamlit as st
 from utils.advisory import get_supabase, get_user_scans
 
 def render_profile():
-    from app import render_header, render_bottom_nav
+    from utils.ui_helpers import render_header, render_bottom_nav
     render_header()
 
     if not st.session_state.get('authenticated'):

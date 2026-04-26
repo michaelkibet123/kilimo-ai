@@ -286,3 +286,39 @@ def render_results(result):
         st.session_state['original_bytes'] = None
         st.session_state['heatmap_bytes'] = None
         st.rerun()
+
+def generate_pdf_report(result):
+    try:
+        from fpdf import FPDF
+        from datetime import datetime
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font('Helvetica', 'B', 20)
+        pdf.cell(0, 10, 'Kilimo AI - Scan Report', ln=True, align='C')
+        pdf.set_font('Helvetica', '', 10)
+        pdf.cell(0, 8, f"Generated: {datetime.now().strftime('%B %d, %Y')}", ln=True, align='C')
+        pdf.ln(5)
+        pdf.set_font('Helvetica', 'B', 14)
+        pdf.cell(0, 10, 'Diagnosis', ln=True)
+        pdf.set_font('Helvetica', '', 11)
+        pdf.cell(40, 8, 'Crop:', ln=False)
+        pdf.cell(0, 8, result.get('crop', ''), ln=True)
+        pdf.cell(40, 8, 'Disease:', ln=False)
+        pdf.cell(0, 8, result.get('disease', ''), ln=True)
+        pdf.cell(40, 8, 'Confidence:', ln=False)
+        pdf.cell(0, 8, f"{int(result.get('confidence',0)*100)}%", ln=True)
+        pdf.cell(40, 8, 'Severity:', ln=False)
+        pdf.cell(0, 8, result.get('severity', ''), ln=True)
+        advisory = result.get('advisory', {})
+        if isinstance(advisory, str):
+            import json
+            advisory = json.loads(advisory)
+        for title, key in [('About', 'description'), ('Immediate Action', 'immediate_action'), ('Treatment', 'treatment'), ('Prevention', 'prevention')]:
+            pdf.set_font('Helvetica', 'B', 12)
+            pdf.cell(0, 10, title, ln=True)
+            pdf.set_font('Helvetica', '', 10)
+            pdf.multi_cell(0, 6, advisory.get(key, 'No data.'))
+            pdf.ln(3)
+        return bytes(pdf.output())
+    except Exception as e:
+        return f"PDF error: {str(e)}".encode()

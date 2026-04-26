@@ -180,7 +180,7 @@ def render_results(result):
         <div style="font-size:1.4rem; font-weight:700; color:#212529;">{result['disease']}</div>
         <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
             <div style="font-size:1.8rem; font-weight:700; color:{severity_color};">{confidence_pct}%</div>
-            <div style="background:{severity_color}20; color:{severity_color}; 
+            <div style="background:rgba(0,0,0,0.1); color:{severity_color}; 
                         padding:0.2rem 0.6rem; border-radius:20px; font-size:0.75rem; font-weight:600;">
                 {result['severity']}
             </div>

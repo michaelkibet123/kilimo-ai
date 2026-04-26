@@ -13,14 +13,16 @@ def load_kilimo_model():
             gdown.download(
                 f"https://drive.google.com/uc?id={st.secrets['GOOGLE_DRIVE_MODEL_ID']}",
                 model_path,
-                quiet=False
+                quiet=False,
+                fuzzy=True
             )
 
     if not os.path.exists(class_path):
         gdown.download(
             f"https://drive.google.com/uc?id={st.secrets['GOOGLE_DRIVE_CLASS_INDICES_ID']}",
             class_path,
-            quiet=False
+            quiet=False,
+            fuzzy=True
         )
 
     from tensorflow.keras.models import load_model

@@ -2,16 +2,80 @@ import streamlit as st
 if "page_config_set" not in st.session_state:
     st.set_page_config(page_title="Kilimo AI", page_icon="🌿", layout="centered", initial_sidebar_state="collapsed")
 def render_header(show_avatar=True):
-    st.markdown("<div class=\"kilimo-header\"><div class=\"kilimo-logo\">🌿 Kilimo AI</div></div>", unsafe_allow_html=True)
+    name = ''
+    if st.session_state.get('profile_data'):
+        name = st.session_state['profile_data'].get('full_name', '')
+    elif st.session_state.get('user'):
+        name = st.session_state['user'].get('email', 'U')
+    initials = get_initials(name) if name else 'G'
+    avatar_html = f'<div class="kilimo-avatar">{initials}</div>' if show_avatar else ''
+    st.markdown(f"""
+    <div class="kilimo-header">
+        <div class="kilimo-logo">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" fill="#40916C" stroke="#1B4332" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            Kilimo <span>AI</span>
+        </div>
+        {avatar_html}
+    </div>
+    """, unsafe_allow_html=True)
+
 
 def render_bottom_nav():
+    page = st.session_state.get('page', 'home')
+    def ic(p, active_color='#1B4332', inactive='#9CA3AF'):
+        return active_color if page == p else inactive
+    def nc(p):
+        return 'nav-item active' if page == p else 'nav-item'
+    st.markdown(f"""
+    <div class="kilimo-bottom-nav">
+        <div class="{nc('home')}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="{ic('home')}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="{nc('history')}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="{ic('history')}" stroke-width="1.8"/>
+                <path d="M12 7V12L15 14" stroke="{ic('history')}" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-label">History</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-fab">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M12 9V15M9 12H15" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span class="nav-label">Scan</span>
+        </div>
+        <div class="{nc('vets')}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" stroke="{ic('vets')}" stroke-width="1.8"/>
+                <path d="M12 7V11M10 9H14" stroke="{ic('vets')}" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-label">Vets</span>
+        </div>
+        <div class="{nc('profile')}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" stroke="{ic('profile')}" stroke-width="1.8"/>
+                <path d="M4 20C4 17 7.58 14 12 14C16.42 14 20 17 20 20" stroke="{ic('profile')}" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-label">Profile</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     cols = st.columns(5)
-    pages = [("home","🏠","Home"),("scan","📷","Scan"),("history","🕐","History"),("vets","🏪","Vets"),("profile","👤","Profile")]
-    for i,(p,icon,label) in enumerate(pages):
+    pages = [('home','Home'),('history','History'),('scan','Scan'),('vets','Vets'),('profile','Profile')]
+    for i,(p,label) in enumerate(pages):
         with cols[i]:
-            if st.button(f"{icon}\n{label}",key=f"nav_{p}",use_container_width=True):
-                st.session_state["page"]=p
+            if st.button(label, key=f"nav_{p}", use_container_width=True):
+                st.session_state['page'] = p
                 st.rerun()
+
 
 def get_initials(name):
     if not name:
@@ -28,105 +92,58 @@ from utils.advisory import get_supabase
 # Custom CSS
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-* { font-family: 'Inter', sans-serif; }
-#MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 0 1rem 5rem 1rem; max-width: 480px; margin: auto; }
-
-.kilimo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid #F0F0F0;
-    margin-bottom: 1rem;
-}
-.kilimo-logo { font-size: 1.4rem; font-weight: 700; color: #1B4332; }
-.avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: #1B4332; color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 600; font-size: 0.9rem;
-}
-.bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: white; border-top: 1px solid #F0F0F0;
-    display: flex; justify-content: space-around;
-    padding: 0.5rem 0; z-index: 999;
-}
-.nav-item {
-    display: flex; flex-direction: column;
-    align-items: center; font-size: 0.65rem;
-    color: #6C757D; text-decoration: none;
-    gap: 2px; cursor: pointer;
-}
-.nav-item.active { color: #1B4332; font-weight: 600; }
-.hero-card {
-    background: #1B4332; color: white;
-    border-radius: 16px; padding: 1.5rem;
-    display: flex; justify-content: space-between;
-    align-items: center; margin: 1rem 0;
-}
-.hero-card h3 { margin: 0; font-size: 1.1rem; }
-.hero-card p { margin: 0.3rem 0 0 0; font-size: 0.85rem; opacity: 0.85; }
-.stat-card {
-    background: #F8F9FA; border-radius: 12px;
-    padding: 1rem; text-align: center;
-}
-.stat-number { font-size: 1.5rem; font-weight: 700; color: #1B4332; }
-.stat-label { font-size: 0.75rem; color: #6C757D; margin-top: 2px; }
-.scan-card {
-    background: white; border: 1px solid #F0F0F0;
-    border-radius: 12px; padding: 1rem;
-    display: flex; align-items: center; gap: 1rem;
-    margin: 0.5rem 0;
-}
-.disease-badge {
-    padding: 0.2rem 0.6rem; border-radius: 20px;
-    font-size: 0.75rem; font-weight: 600;
-}
-.badge-high { background: #FEE2E2; color: #DC2626; }
-.badge-medium { background: #FEF3C7; color: #F59E0B; }
-.badge-low { background: #D1FAE5; color: #16A34A; }
-.tip-card {
-    background: #F8F9FA; border-radius: 10px;
-    padding: 0.75rem; text-align: center;
-    font-size: 0.8rem; color: #495057;
-}
-.tip-icon { font-size: 1.2rem; margin-bottom: 0.3rem; }
-.seasonal-card {
-    background: #FFFBEB; border: 1px solid #FDE68A;
-    border-radius: 12px; padding: 1rem; margin: 0.5rem 0;
-}
-.btn-primary {
-    background: #1B4332; color: white;
-    border: none; border-radius: 10px;
-    padding: 0.75rem 1.5rem; font-size: 0.95rem;
-    font-weight: 600; width: 100%; cursor: pointer;
-}
-.btn-outline {
-    background: white; color: #1B4332;
-    border: 2px solid #1B4332; border-radius: 10px;
-    padding: 0.75rem 1.5rem; font-size: 0.95rem;
-    font-weight: 600; width: 100%; cursor: pointer;
-}
-.landing-hero {
-    min-height: 100vh;
-    background: linear-gradient(180deg, #1B4332 0%, #2D6A4F 50%, #40916C 100%);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 2rem; color: white; text-align: center;
-}
-.stButton > button {
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    height: 3rem !important;
-}
-.stButton > button[kind="primary"] {
-    background: #1B4332 !important;
-    border: none !important;
-}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;background:#FAFAF8;color:#1A1A1A;-webkit-font-smoothing:antialiased;}
+#MainMenu,footer,header,[data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"],[data-testid="collapsedControl"],section[data-testid="stSidebar"]{display:none!important;}
+[data-testid="stAppViewContainer"]>.main{background:#FAFAF8;padding:0!important;}
+.block-container{padding:0 0 88px 0!important;max-width:520px!important;margin:0 auto!important;}
+@media(min-width:640px){.block-container{max-width:740px!important;padding:0 24px 88px 24px!important;}}
+.kilimo-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 12px;background:#FAFAF8;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(0,0,0,0.06);}
+.kilimo-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#1B4332;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px;}
+.kilimo-logo span{color:#40916C;}
+.kilimo-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1B4332,#40916C);color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:600;}
+.kilimo-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid rgba(0,0,0,0.08);display:flex;justify-content:space-around;align-items:center;padding:8px 0 20px;z-index:999;box-shadow:0 -4px 20px rgba(0,0,0,0.06);}
+.nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:4px 8px;min-width:52px;}
+.nav-label{font-size:0.62rem;font-weight:500;color:#9CA3AF;}
+.nav-item.active .nav-label{color:#1B4332;font-weight:700;}
+.nav-fab{width:52px;height:52px;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(27,67,50,0.4);margin-top:-24px;}
+.kilimo-card{background:white;border-radius:20px;padding:20px;margin:12px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04);}
+.kilimo-card-hero{background:linear-gradient(135deg,#1B4332 0%,#2D6A4F 60%,#40916C 100%);border-radius:20px;padding:24px 20px;margin:12px 16px;color:white;position:relative;overflow:hidden;}
+.kilimo-card-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.07);}
+.kilimo-stat{background:white;border-radius:16px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.kilimo-stat-number{font-family:'DM Serif Display',serif;font-size:1.8rem;color:#1B4332;line-height:1;}
+.kilimo-stat-label{font-size:0.7rem;color:#9CA3AF;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;font-weight:500;}
+.badge-severe{background:#FEE2E2;color:#DC2626;display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;}
+.badge-moderate{background:#FEF3C7;color:#D97706;display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;}
+.badge-healthy{background:#D1FAE5;color:#059669;display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;}
+.kilimo-alert{background:#FFFBEB;border:1px solid #FDE68A;border-left:4px solid #F59E0B;border-radius:12px;padding:14px 16px;margin:8px 16px;}
+.kilimo-upload-card{border:2px dashed #D1FAE5;border-radius:16px;padding:24px 16px;text-align:center;background:#F0FDF4;}
+.kilimo-tip{background:white;border-radius:14px;padding:14px 10px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,0.05);}
+.kilimo-tip-icon{font-size:1.5rem;margin-bottom:6px;}
+.kilimo-tip-text{font-size:0.72rem;color:#6B7280;font-weight:500;line-height:1.3;}
+.kilimo-result-card{background:white;border-radius:20px;padding:20px;margin:12px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);}
+.kilimo-disease-name{font-family:'DM Serif Display',serif;font-size:1.6rem;color:#1A1A1A;line-height:1.2;margin:4px 0 8px;}
+.kilimo-confidence{font-family:'DM Serif Display',serif;font-size:2.4rem;line-height:1;}
+.stButton>button{font-family:'DM Sans',sans-serif!important;font-weight:600!important;border-radius:14px!important;height:52px!important;font-size:0.95rem!important;letter-spacing:0.01em!important;}
+.stButton>button[kind="primary"]{background:linear-gradient(135deg,#1B4332,#2D6A4F)!important;border:none!important;box-shadow:0 4px 12px rgba(27,67,50,0.25)!important;}
+.stButton>button[kind="secondary"]{background:white!important;border:2px solid #E5E7EB!important;color:#1A1A1A!important;}
+.stTextInput>div>div>input{border-radius:12px!important;border:2px solid #E5E7EB!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;}
+.stTabs [data-baseweb="tab-list"]{background:#F3F4F6;border-radius:12px;padding:4px;gap:4px;}
+.stTabs [data-baseweb="tab"]{border-radius:10px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.85rem!important;color:#6B7280!important;padding:8px 16px!important;}
+.stTabs [aria-selected="true"]{background:white!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 4px rgba(0,0,0,0.1)!important;}
+.kilimo-profile-hero{background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:20px;padding:24px 20px;margin:12px 16px;color:white;}
+.kilimo-profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.15);border-radius:14px;overflow:hidden;margin-top:16px;}
+.kilimo-profile-stat{background:rgba(255,255,255,0.08);padding:12px 8px;text-align:center;}
+.kilimo-profile-stat-num{font-family:'DM Serif Display',serif;font-size:1.4rem;color:white;line-height:1;}
+.kilimo-profile-stat-label{font-size:0.65rem;color:rgba(255,255,255,0.7);margin-top:3px;text-transform:uppercase;letter-spacing:0.05em;}
+.kilimo-pill{display:inline-block;background:#F0FDF4;color:#166534;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:500;margin:2px;}
+.kilimo-vet-card{background:white;border-radius:16px;padding:16px;margin:8px 16px;box-shadow:0 1px 6px rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.04);}
+.kilimo-landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;background:#FAFAF8;}
+.kilimo-landing-logo{font-family:'DM Serif Display',serif;font-size:3rem;color:#1B4332;letter-spacing:-0.03em;line-height:1;margin:20px 0 8px;}
+.kilimo-landing-tag{font-size:0.8rem;color:#6B7280;letter-spacing:0.15em;text-transform:uppercase;}
+.kilimo-leaf-mark{width:80px;height:80px;background:linear-gradient(135deg,#1B4332,#40916C);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 8px 32px rgba(27,67,50,0.3);margin:0 auto;}
+.main .block-container>div{padding:0!important;}
 </style>
 """, unsafe_allow_html=True)
 

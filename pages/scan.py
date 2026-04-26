@@ -160,242 +160,129 @@ def render_scan():
 
 def render_results(result):
     from utils.preprocessor import format_disease_name
+    import json
+
     st.markdown("---")
     st.markdown("## Scan Result")
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(st.session_state.get('original_bytes', b''), caption="Original", use_container_width=True)
+        orig = st.session_state.get('original_bytes', b'')
+        if orig:
+            st.image(orig, caption="Original", use_container_width=True)
     with col2:
-        st.image(st.session_state.get('heatmap_bytes', b''), caption="Disease Hotspots", use_container_width=True)
+        heat = st.session_state.get('heatmap_bytes', b'')
+        if heat:
+            st.image(heat, caption="Disease Hotspots", use_container_width=True)
 
-    severity_color = result['severity_color']
-    confidence_pct = int(result['confidence'] * 100)
-    
-    st.markdown(f"""
-    <div style="border-left: 4px solid {severity_color}; background:white; 
-                border-radius:0 12px 12px 0; padding:1rem; margin:1rem 0;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-        <div style="font-size:0.8rem; color:#6C757D;">{result['crop']}</div>
-        <div style="font-size:1.4rem; font-weight:700; color:#212529;">{result['disease']}</div>
-        <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-            <div style="font-size:1.8rem; font-weight:700; color:{severity_color};">{confidence_pct}%</div>
-            <div style="background:rgba(0,0,0,0.1); color:{severity_color}; 
-                        padding:0.2rem 0.6rem; border-radius:20px; font-size:0.75rem; font-weight:600;">
-                {result['severity']}
-            </div>
-        </div>
-        <div style="font-size:0.8rem; color:#6C757D; margin-top:0.3rem;">Confidence Score</div>
-    </div>
-    """, unsafe_allow_html=True)
+    severity_color = result.get('severity_color', '#1B4332')
+    confidence_pct = int(result.get('confidence', 0) * 100)
+    crop = result.get('crop', '')
+    disease = result.get('disease', '')
+    severity = result.get('severity', '')
 
-    top3 = result.get("top3") or []
+    st.markdown(f"**{crop}**")
+    st.markdown(f"### {disease}")
+    st.markdown(f"**Confidence:** {confidence_pct}%")
+    st.markdown(f"**Severity:** {severity}")
+
+    top3 = result.get('top3') or []
     if isinstance(top3, str):
-        import json
         top3 = json.loads(top3)
-    with st.expander("📊 View full confidence breakdown"):
-        for item in top3:
-            _, disease = format_disease_name(item['class'])
-            pct = item['confidence']
-            color = '#1B4332' if pct == result['confidence'] else '#6C757D'
-            st.markdown(f"""
-            <div style="margin:0.5rem 0;">
-                <div style="display:flex; justify-content:space-between; 
-                            font-size:0.8rem; margin-bottom:0.2rem;">
-                    <span>{disease}</span>
-                    <span style="font-weight:600; color:{color};">{int(pct*100)}%</span>
-                </div>
-                <div style="background:#F0F0F0; border-radius:4px; height:6px;">
-                    <div style="background:{color}; width:{int(pct*100)}%; 
-                                height:6px; border-radius:4px;"></div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
 
-    if result['confidence'] < 0.70:
-        st.markdown("""
-        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:12px; 
-                    padding:1rem; margin:0.5rem 0; display:flex; align-items:center; gap:0.5rem;">
-            <span style="font-size:1.2rem;">⚠️</span>
-            <span style="font-size:0.85rem; color:#92400E;">
-                Low confidence result — we recommend consulting an expert.
-            </span>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("🏪 Find Nearest Vet", key="find_vet"):
+    with st.expander("View full confidence breakdown"):
+        for item in top3:
+            try:
+                _, d = format_disease_name(item['class'])
+                pct = item['confidence']
+                st.write(f"{d}: {int(pct*100)}%")
+                st.progress(float(pct))
+            except Exception:
+                pass
+
+    if result.get('confidence', 1) < 0.70:
+        st.warning("Low confidence result — we recommend consulting an expert.")
+        if st.button("Find Nearest Vet", key="find_vet"):
             st.session_state['page'] = 'vets'
             st.rerun()
 
-    advisory = result['advisory']
-    
-    st.markdown("### About this Disease")
-    st.markdown(f"""
-    <div style="background:#F8F9FA; border-radius:10px; padding:1rem; 
-                font-size:0.85rem; color:#495057; line-height:1.6;">
-        {advisory.get('description', 'No description available.')}
-    </div>
-    """, unsafe_allow_html=True)
+    advisory = result.get('advisory', {})
+    if isinstance(advisory, str):
+        advisory = json.loads(advisory)
 
-    if st.button("🌐 Get Latest Info from Web", key="scrape_btn"):
+    st.markdown("### About this Disease")
+    st.info(advisory.get('description', 'No description available.'))
+
+    if st.button("Get Latest Info from Web", key="scrape_btn"):
+        from utils.scraper import get_latest_advisory
         with st.spinner("Fetching latest advisory..."):
-            scraped, success = get_latest_advisory(result['raw_class'])
+            scraped, success = get_latest_advisory(result.get('raw_class', ''))
             if success and scraped:
                 st.success("Latest advisory loaded!")
                 st.info(scraped)
             else:
-                st.info("No newer information found. Showing database advisory.")
+                st.info("No newer information found.")
 
     st.markdown("### Treatment Plan")
-    tab1, tab2, tab3 = st.tabs(["⚡ Immediate Action", "💊 Treatment", "🛡️ Prevention"])
-    
+    tab1, tab2, tab3 = st.tabs(["Immediate Action", "Treatment", "Prevention"])
     with tab1:
-        st.markdown(f"""
-        <div style="padding:0.5rem 0; font-size:0.85rem; color:#495057; line-height:1.6;">
-            {advisory.get('immediate_action', 'No data available.')}
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.write(advisory.get('immediate_action', 'No data available.'))
     with tab2:
-        st.markdown(f"""
-        <div style="padding:0.5rem 0; font-size:0.85rem; color:#495057; line-height:1.6;">
-            {advisory.get('treatment', 'No data available.')}
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.write(advisory.get('treatment', 'No data available.'))
     with tab3:
-        st.markdown(f"""
-        <div style="padding:0.5rem 0; font-size:0.85rem; color:#495057; line-height:1.6;">
-            {advisory.get('prevention', 'No data available.')}
-        </div>
-        """, unsafe_allow_html=True)
+        st.write(advisory.get('prevention', 'No data available.'))
 
-    st.markdown("### Save & Download")
+    st.markdown("### Download")
     col1, col2 = st.columns(2)
-    
     with col1:
-        st.download_button(
-            label="📥 Download Heatmap",
-            data=st.session_state.get('heatmap_bytes', b''),
-            file_name=f"kilimo_ai_{result['disease'].replace(' ', '_')}_heatmap.png",
-            mime="image/png",
-            use_container_width=True
-        )
-    
+        heat = st.session_state.get('heatmap_bytes', b'')
+        if heat:
+            st.download_button(
+                label="Download Heatmap",
+                data=heat,
+                file_name=f"kilimo_{disease.replace(' ', '_')}_heatmap.png",
+                mime="image/png",
+                use_container_width=True
+            )
     with col2:
         pdf_bytes = generate_pdf_report(result)
         st.download_button(
-            label="📄 Download PDF Report",
+            label="Download PDF Report",
             data=pdf_bytes,
-            file_name=f"kilimo_ai_{result['disease'].replace(' ', '_')}_report.pdf",
+            file_name=f"kilimo_{disease.replace(' ', '_')}_report.pdf",
             mime="application/pdf",
             use_container_width=True
         )
 
     if st.session_state.get('authenticated'):
-        if st.button("💾 Save Scan", use_container_width=True, type="primary", key="save_scan"):
+        if st.button("Save Scan", use_container_width=True, type="primary", key="save_scan"):
+            from utils.advisory import save_scan_to_db
             user_id = st.session_state['user'].get('id')
             success = save_scan_to_db(
                 user_id=user_id,
-                crop=result['crop'],
-                disease=result['disease'],
-                confidence=result['confidence'],
-                top3=result['top3'],
+                crop=crop,
+                disease=disease,
+                confidence=result.get('confidence', 0),
+                top3=top3,
                 image_url='',
                 heatmap_url='',
-                treatment=result['advisory']
+                treatment=advisory
             )
             if success:
                 st.success("Scan saved to your history!")
             else:
-                st.error("Failed to save scan. Please try again.")
+                st.error("Failed to save scan.")
     else:
-        st.markdown("""
-        <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:12px;
-                    padding:1rem; text-align:center; margin:0.5rem 0;">
-            <div style="font-size:0.85rem; color:#166534; font-weight:600;">
-                Create a free account to save your scan history
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.info("Create a free account to save your scan history.")
         if st.button("Create Free Account", use_container_width=True, key="guest_signup"):
             st.session_state['guest'] = False
             st.session_state['show_landing'] = False
             st.session_state['auth_mode'] = 'signup'
             st.rerun()
 
-    if st.button("🔄 Scan Again", use_container_width=True, key="scan_again"):
+    if st.button("Scan Again", use_container_width=True, key="scan_again"):
         st.session_state['scan_result'] = None
         st.session_state['uploaded_image'] = None
+        st.session_state['original_bytes'] = None
+        st.session_state['heatmap_bytes'] = None
         st.rerun()
-
-def generate_pdf_report(result):
-    try:
-        from fpdf import FPDF
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font('Helvetica', 'B', 20)
-        pdf.set_text_color(27, 67, 50)
-        pdf.cell(0, 10, 'Kilimo AI - Scan Report', ln=True, align='C')
-        pdf.set_font('Helvetica', '', 10)
-        pdf.set_text_color(108, 117, 125)
-        
-        from datetime import datetime
-        pdf.cell(0, 8, f"Generated: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}", ln=True, align='C')
-        pdf.ln(5)
-        
-        pdf.set_draw_color(27, 67, 50)
-        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-        pdf.ln(5)
-        
-        pdf.set_font('Helvetica', 'B', 14)
-        pdf.set_text_color(33, 37, 41)
-        pdf.cell(0, 10, 'Diagnosis', ln=True)
-        
-        pdf.set_font('Helvetica', '', 11)
-        pdf.cell(40, 8, 'Crop:', ln=False)
-        pdf.set_font('Helvetica', 'B', 11)
-        pdf.cell(0, 8, result['crop'], ln=True)
-        
-        pdf.set_font('Helvetica', '', 11)
-        pdf.cell(40, 8, 'Disease:', ln=False)
-        pdf.set_font('Helvetica', 'B', 11)
-        pdf.cell(0, 8, result['disease'], ln=True)
-        
-        pdf.set_font('Helvetica', '', 11)
-        pdf.cell(40, 8, 'Confidence:', ln=False)
-        pdf.set_font('Helvetica', 'B', 11)
-        pdf.cell(0, 8, f"{int(result['confidence']*100)}%", ln=True)
-        
-        pdf.set_font('Helvetica', '', 11)
-        pdf.cell(40, 8, 'Severity:', ln=False)
-        pdf.set_font('Helvetica', 'B', 11)
-        pdf.cell(0, 8, result['severity'], ln=True)
-        pdf.ln(5)
-        
-        advisory = result['advisory']
-        sections = [
-            ('About this Disease', 'description'),
-            ('Immediate Action', 'immediate_action'),
-            ('Treatment', 'treatment'),
-            ('Prevention', 'prevention')
-        ]
-        
-        for title, key in sections:
-            pdf.set_font('Helvetica', 'B', 12)
-            pdf.set_text_color(27, 67, 50)
-            pdf.cell(0, 10, title, ln=True)
-            pdf.set_font('Helvetica', '', 10)
-            pdf.set_text_color(73, 80, 87)
-            content = advisory.get(key, 'No data available.')
-            pdf.multi_cell(0, 6, content)
-            pdf.ln(3)
-        
-        pdf.set_font('Helvetica', 'I', 8)
-        pdf.set_text_color(108, 117, 125)
-        pdf.cell(0, 8, 'Kilimo AI - AI-powered crop disease diagnosis for Kenyan farmers', ln=True, align='C')
-        
-        return bytes(pdf.output())
-    except ImportError:
-        return b"PDF generation requires fpdf2. Please install it."
-    except Exception as e:
-        return f"PDF generation failed: {str(e)}".encode()

@@ -7,9 +7,19 @@ from utils.gradcam import generate_gradcam, overlay_heatmap, pil_to_bytes
 from utils.advisory import get_advisory, save_scan_to_db, get_supabase
 from utils.scraper import get_latest_advisory
 import json
+def render_header():
+    st.markdown('<div class="kilimo-header"><div class="kilimo-logo">🌿 Kilimo AI</div></div>', unsafe_allow_html=True)
+
+def render_bottom_nav():
+    cols = st.columns(5)
+    pages = [('home','🏠','Home'),('scan','📷','Scan'),('history','🕐','History'),('vets','🏪','Vets'),('profile','👤','Profile')]
+    for i,(p,icon,label) in enumerate(pages):
+        with cols[i]:
+            if st.button(f"{icon}\n{label}",key=f"nav_{p}",use_container_width=True):
+                st.session_state['page']=p
+                st.rerun()
 
 def render_scan():
-    from utils.ui_helpers import render_header, render_bottom_nav
     
     render_header()
 

@@ -97,7 +97,7 @@ def render_scan():
 
     if image_bytes:
         img = Image.open(io.BytesIO(image_bytes))
-        st.image(img, use_column_width=True, caption="Uploaded leaf image")
+        st.image(img, use_container_width=True, caption="Uploaded leaf image")
 
         if st.button("🔬 Analyse Leaf", use_container_width=True, type="primary"):
             with st.spinner("Analysing your leaf..."):
@@ -161,9 +161,9 @@ def render_results(result):
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(result['original_bytes'], caption="Original", use_column_width=True)
+        st.image(result['original_bytes'], caption="Original", use_container_width=True)
     with col2:
-        st.image(result['heatmap_bytes'], caption="Disease Hotspots", use_column_width=True)
+        st.image(result['heatmap_bytes'], caption="Disease Hotspots", use_container_width=True)
 
     severity_color = result['severity_color']
     confidence_pct = int(result['confidence'] * 100)

@@ -8,14 +8,17 @@ def load_kilimo_model():
     model_path = '/tmp/kilimo_ai_v1.h5'
     class_path = '/tmp/kilimo_class_indices.json'
 
-    if not os.path.exists(model_path):
-        with st.spinner('Loading Kilimo AI model...'):
-            gdown.download(
-                f"https://drive.google.com/uc?id={st.secrets['GOOGLE_DRIVE_MODEL_ID']}",
-                model_path,
-                quiet=False,
-                fuzzy=True
-            )
+    # Force fresh download
+    if os.path.exists(model_path):
+        os.remove(model_path)
+
+    with st.spinner('Loading Kilimo AI model...'):
+        gdown.download(
+            f"https://drive.google.com/uc?id={st.secrets['GOOGLE_DRIVE_MODEL_ID']}",
+            model_path,
+            quiet=False,
+            fuzzy=True
+        )
 
     if not os.path.exists(class_path):
         gdown.download(

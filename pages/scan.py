@@ -186,6 +186,8 @@ def render_results(result):
     </div>
     """, unsafe_allow_html=True)
 
+    st.write(type(result))
+    st.write(str(result)[:200])
     top3 = result.get("top3") or []
     if isinstance(top3, str):
         import json

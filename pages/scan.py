@@ -156,6 +156,7 @@ def render_scan():
     render_bottom_nav()
 
 def render_results(result):
+    from utils.preprocessor import format_disease_name
     st.markdown("---")
     st.markdown("## Scan Result")
 

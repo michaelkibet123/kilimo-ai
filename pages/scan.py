@@ -1,4 +1,5 @@
 import streamlit as st
+import json
 def render_header():
     st.markdown('<div class="kilimo-header"><div class="kilimo-logo">🌿 Kilimo AI</div></div>', unsafe_allow_html=True)
 
@@ -186,7 +187,7 @@ def render_results(result):
     </div>
     """, unsafe_allow_html=True)
 
-    top3 = result.get('top3', [])
+    top3 = result.get("top3") or []
     if isinstance(top3, str):
         import json
         top3 = json.loads(top3)

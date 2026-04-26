@@ -144,6 +144,35 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .kilimo-landing-tag{font-size:0.8rem;color:#6B7280;letter-spacing:0.15em;text-transform:uppercase;}
 .kilimo-leaf-mark{width:80px;height:80px;background:linear-gradient(135deg,#1B4332,#40916C);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 8px 32px rgba(27,67,50,0.3);margin:0 auto;}
 .main .block-container>div{padding:0!important;}
+
+/* Hide duplicate streamlit nav buttons */
+div[data-testid="stHorizontalBlock"] .stButton button {
+    opacity: 0 !important;
+    height: 60px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: absolute !important;
+    width: 100% !important;
+}
+div[data-testid="stHorizontalBlock"] {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    height: 72px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+/* Background fix - make page grey so white cards pop */
+[data-testid="stAppViewContainer"] > .main {
+    background: #F0F2F0 !important;
+}
+.block-container {
+    background: #F0F2F0 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 

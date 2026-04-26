@@ -475,6 +475,4 @@ def main():
         render_profile()
 
 if __name__ == '__main__':
-    main()import streamlit as st
-st.title("Kilimo AI")
-st.write("Coming soon.")
+    main()

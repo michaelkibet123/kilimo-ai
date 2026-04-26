@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 def render_history():
     from utils.ui_helpers import render_header, render_bottom_nav
+    
     render_header()
 
     if not st.session_state.get('authenticated'):

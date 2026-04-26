@@ -10,6 +10,7 @@ import json
 
 def render_scan():
     from utils.ui_helpers import render_header, render_bottom_nav
+    
     render_header()
 
     st.markdown("### Select Crop")

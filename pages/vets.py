@@ -3,6 +3,7 @@ from utils.advisory import get_vets
 
 def render_vets():
     from utils.ui_helpers import render_header, render_bottom_nav
+    
     render_header()
 
     st.markdown("## Vets & Agrovets")

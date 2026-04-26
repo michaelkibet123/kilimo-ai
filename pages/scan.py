@@ -186,8 +186,12 @@ def render_results(result):
     </div>
     """, unsafe_allow_html=True)
 
+    top3 = result['top3']
+    if isinstance(top3, str):
+        import json
+        top3 = json.loads(top3)
     with st.expander("📊 View full confidence breakdown"):
-        for item in result['top3']:
+        for item in top3:
             _, disease = format_disease_name(item['class'])
             pct = item['confidence']
             color = '#1B4332' if pct == result['confidence'] else '#6C757D'

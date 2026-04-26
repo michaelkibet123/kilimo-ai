@@ -1,6 +1,26 @@
 import streamlit as st
 if "page_config_set" not in st.session_state:
     st.set_page_config(page_title="Kilimo AI", page_icon="🌿", layout="centered", initial_sidebar_state="collapsed")
+def render_header(show_avatar=True):
+    st.markdown("<div class=\"kilimo-header\"><div class=\"kilimo-logo\">🌿 Kilimo AI</div></div>", unsafe_allow_html=True)
+
+def render_bottom_nav():
+    cols = st.columns(5)
+    pages = [("home","🏠","Home"),("scan","📷","Scan"),("history","🕐","History"),("vets","🏪","Vets"),("profile","👤","Profile")]
+    for i,(p,icon,label) in enumerate(pages):
+        with cols[i]:
+            if st.button(f"{icon}\n{label}",key=f"nav_{p}",use_container_width=True):
+                st.session_state["page"]=p
+                st.rerun()
+
+def get_initials(name):
+    if not name:
+        return "U"
+    parts = name.strip().split()
+    if len(parts) >= 2:
+        return f"{parts[0][0]}{parts[1][0]}".upper()
+    return parts[0][0].upper()
+
     st.session_state["page_config_set"] = True
 
 from utils.advisory import get_supabase

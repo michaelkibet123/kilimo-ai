@@ -1,5 +1,7 @@
 import streamlit as st
-st.set_page_config(page_title="Kilimo AI", page_icon="🌿", layout="centered", initial_sidebar_state="collapsed")
+if "page_config_set" not in st.session_state:
+    st.set_page_config(page_title="Kilimo AI", page_icon="🌿", layout="centered", initial_sidebar_state="collapsed")
+    st.session_state["page_config_set"] = True
 
 from utils.advisory import get_supabase
 

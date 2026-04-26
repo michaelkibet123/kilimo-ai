@@ -186,7 +186,7 @@ def render_results(result):
     </div>
     """, unsafe_allow_html=True)
 
-    top3 = result['top3']
+    top3 = result.get('top3', [])
     if isinstance(top3, str):
         import json
         top3 = json.loads(top3)

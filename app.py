@@ -1,6 +1,4 @@
 import streamlit as st
-from utils.advisory import get_supabase
-from utils.ui_helpers import render_header, render_bottom_nav, get_initials
 
 st.set_page_config(
     page_title="Kilimo AI",
@@ -8,6 +6,8 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+from utils.advisory import get_supabase
+from utils.ui_helpers import render_header, render_bottom_nav, get_initials
 
 # Custom CSS
 st.markdown("""

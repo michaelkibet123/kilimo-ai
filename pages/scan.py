@@ -165,9 +165,9 @@ def render_results(result):
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(result['original_bytes'], caption="Original", use_container_width=True)
+        st.image(st.session_state.get('original_bytes', b''), caption="Original", use_container_width=True)
     with col2:
-        st.image(result['heatmap_bytes'], caption="Disease Hotspots", use_container_width=True)
+        st.image(st.session_state.get('heatmap_bytes', b''), caption="Disease Hotspots", use_container_width=True)
 
     severity_color = result['severity_color']
     confidence_pct = int(result['confidence'] * 100)
@@ -275,7 +275,7 @@ def render_results(result):
     with col1:
         st.download_button(
             label="📥 Download Heatmap",
-            data=result['heatmap_bytes'],
+            data=st.session_state.get('heatmap_bytes', b''),
             file_name=f"kilimo_ai_{result['disease'].replace(' ', '_')}_heatmap.png",
             mime="image/png",
             use_container_width=True

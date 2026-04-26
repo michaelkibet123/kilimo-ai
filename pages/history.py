@@ -1,6 +1,4 @@
 import streamlit as st
-from utils.advisory import get_user_scans
-from utils.preprocessor import format_disease_name
 from datetime import datetime, timezone
 def render_header():
     st.markdown('<div class="kilimo-header"><div class="kilimo-logo">🌿 Kilimo AI</div></div>', unsafe_allow_html=True)
@@ -15,6 +13,9 @@ def render_bottom_nav():
                 st.rerun()
 
 def render_history():
+    import json
+    from utils.advisory import get_user_scans
+    from utils.preprocessor import format_disease_name
     
     render_header()
 

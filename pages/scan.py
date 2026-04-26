@@ -1,12 +1,4 @@
 import streamlit as st
-import io
-from PIL import Image
-from utils.model_loader import load_kilimo_model
-from utils.preprocessor import preprocess_image, get_severity, get_top3, format_disease_name
-from utils.gradcam import generate_gradcam, overlay_heatmap, pil_to_bytes
-from utils.advisory import get_advisory, save_scan_to_db, get_supabase
-from utils.scraper import get_latest_advisory
-import json
 def render_header():
     st.markdown('<div class="kilimo-header"><div class="kilimo-logo">🌿 Kilimo AI</div></div>', unsafe_allow_html=True)
 
@@ -20,6 +12,14 @@ def render_bottom_nav():
                 st.rerun()
 
 def render_scan():
+    from PIL import Image
+    import io
+    import json
+    from utils.model_loader import load_kilimo_model
+    from utils.preprocessor import preprocess_image, get_severity, get_top3, format_disease_name
+    from utils.gradcam import generate_gradcam, overlay_heatmap, pil_to_bytes
+    from utils.advisory import get_advisory, save_scan_to_db, get_supabase
+    from utils.scraper import get_latest_advisory
     
     render_header()
 

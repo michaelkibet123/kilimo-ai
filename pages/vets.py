@@ -1,5 +1,4 @@
 import streamlit as st
-from utils.advisory import get_vets
 def render_header():
     st.markdown('<div class="kilimo-header"><div class="kilimo-logo">🌿 Kilimo AI</div></div>', unsafe_allow_html=True)
 
@@ -13,6 +12,7 @@ def render_bottom_nav():
                 st.rerun()
 
 def render_vets():
+    from utils.advisory import get_vets
     
     render_header()
 

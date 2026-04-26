@@ -10,3 +10,4 @@ beautifulsoup4==4.12.3
 lxml==4.9.3
 gdown==4.7.3
 python-dotenv==1.0.0
+fpdf2==2.7.9

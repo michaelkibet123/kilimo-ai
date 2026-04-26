@@ -132,6 +132,9 @@ def render_scan():
                     
                     advisory = get_advisory(top_class)
                     
+                    st.session_state['original_bytes'] = image_bytes
+                    st.session_state['heatmap_bytes'] = pil_to_bytes(overlay)
+                    st.session_state['heatmap_only_bytes'] = pil_to_bytes(Image.fromarray(heatmap))
                     st.session_state['scan_result'] = {
                         'crop': crop_name,
                         'disease': disease_name,
@@ -141,9 +144,9 @@ def render_scan():
                         'severity_color': severity_color,
                         'top3': top3,
                         'advisory': advisory,
-                        'original_bytes': image_bytes,
-                        'heatmap_bytes': pil_to_bytes(overlay),
-                        'heatmap_only_bytes': pil_to_bytes(Image.fromarray(heatmap))
+                        'original_bytes': None,
+                        'heatmap_bytes': None,
+                        'heatmap_only_bytes': None
                     }
                     
                 except Exception as e:
@@ -186,8 +189,6 @@ def render_results(result):
     </div>
     """, unsafe_allow_html=True)
 
-    st.write(type(result))
-    st.write(str(result)[:200])
     top3 = result.get("top3") or []
     if isinstance(top3, str):
         import json

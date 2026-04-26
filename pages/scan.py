@@ -145,7 +145,6 @@ def render_scan():
                         'heatmap_bytes': pil_to_bytes(overlay),
                         'heatmap_only_bytes': pil_to_bytes(Image.fromarray(heatmap))
                     }
-                    st.rerun()
                     
                 except Exception as e:
                     st.error(f"Analysis failed: {str(e)}")

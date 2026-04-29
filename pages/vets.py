@@ -19,40 +19,44 @@ def render_bottom_nav():
     muted = "#9CA3AF"
     active = "#1B4332"
     def s(p): return active if page==p else muted
-    def nc(p): return "knav-item active" if page==p else "knav-item"
+    def nc(p): return "active" if page==p else ""
     st.markdown(
-        '<div class="knav" style="background:'+card+';border-top:1px solid '+border+';">'
-        '<div class="'+nc("home")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="'+s("home")+'" stroke-width="2" stroke-linejoin="round"/>'
-        '</svg><span class="knav-label">Home</span></div>'
-        '<div class="'+nc("history")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<circle cx="12" cy="12" r="9" stroke="'+s("history")+'" stroke-width="2"/>'
-        '<path d="M12 7V12L15 14" stroke="'+s("history")+'" stroke-width="2" stroke-linecap="round"/>'
-        '</svg><span class="knav-label">History</span></div>'
-        '<div class="knav-item"><div class="knav-fab">'
-        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none">'
-        '<path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>'
-        '<path d="M12 9V15M9 12H15" stroke="white" stroke-width="2" stroke-linecap="round"/>'
-        '</svg></div><span class="knav-label">Scan</span></div>'
-        '<div class="'+nc("vets")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" stroke="'+s("vets")+'" stroke-width="2"/>'
-        '<path d="M12 7V11M10 9H14" stroke="'+s("vets")+'" stroke-width="2" stroke-linecap="round"/>'
-        '</svg><span class="knav-label">Vets</span></div>'
-        '<div class="'+nc("profile")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<circle cx="12" cy="8" r="4" stroke="'+s("profile")+'" stroke-width="2"/>'
-        '<path d="M4 20C4 17 7.58 14 12 14C16.42 14 20 17 20 20" stroke="'+s("profile")+'" stroke-width="2" stroke-linecap="round"/>'
-        '</svg><span class="knav-label">Profile</span></div>'
-        '</div>', unsafe_allow_html=True)
+        '<div class="knav" style="background:'+card+';border-bottom:1px solid '+border+';">' 
+        '<div class="knav-icons">' 
+        '<div class="knav-item '+nc("home")+'">' 
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">' 
+        '<path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="'+s("home")+'" stroke-width="2" stroke-linejoin="round"/>' 
+        '</svg><span class="knav-label">Home</span></div>' 
+        '<div class="knav-item '+nc("history")+'">' 
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">' 
+        '<circle cx="12" cy="12" r="9" stroke="'+s("history")+'" stroke-width="2"/>' 
+        '<path d="M12 7V12L15 14" stroke="'+s("history")+'" stroke-width="2" stroke-linecap="round"/>' 
+        '</svg><span class="knav-label">History</span></div>' 
+        '<div class="knav-item knav-scan '+nc("scan")+'">' 
+        '<div class="knav-fab">' 
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none">' 
+        '<path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>' 
+        '<path d="M12 9V15M9 12H15" stroke="white" stroke-width="2" stroke-linecap="round"/>' 
+        '</svg></div><span class="knav-label">Scan</span></div>' 
+        '<div class="knav-item '+nc("vets")+'">' 
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">' 
+        '<path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" stroke="'+s("vets")+'" stroke-width="2"/>' 
+        '<path d="M12 7V11M10 9H14" stroke="'+s("vets")+'" stroke-width="2" stroke-linecap="round"/>' 
+        '</svg><span class="knav-label">Vets</span></div>' 
+        '<div class="knav-item '+nc("profile")+'">' 
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">' 
+        '<circle cx="12" cy="8" r="4" stroke="'+s("profile")+'" stroke-width="2"/>' 
+        '<path d="M4 20C4 17 7.58 14 12 14C16.42 14 20 17 20 20" stroke="'+s("profile")+'" stroke-width="2" stroke-linecap="round"/>' 
+        '</svg><span class="knav-label">Profile</span></div>' 
+        '</div></div>',
+        unsafe_allow_html=True)
     cols = st.columns(5)
     for i,(p,label) in enumerate([("home","Home"),("history","History"),("scan","Scan"),("vets","Vets"),("profile","Profile")]):
         with cols[i]:
-            if st.button(label, key="nav_"+p+"_vets", use_container_width=True):
+            if st.button(label, key="nav_"+p+suffix, use_container_width=True):
                 st.session_state["page"] = p
                 st.rerun()
+
 
 def render_vets():
     from utils.advisory import get_vets

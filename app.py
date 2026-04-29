@@ -56,13 +56,23 @@ html,body,[data-testid="stAppViewContainer"]{{font-family:'DM Sans',sans-serif;b
 .stTabs [data-baseweb="tab-list"]{{background:{"#2A2A2A" if dark else "#F3F4F6"};border-radius:10px;padding:3px;}}
 .stTabs [data-baseweb="tab"]{{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:{muted}!important;}}
 .stTabs [aria-selected="true"]{{background:{card}!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;}}
-.knav{{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:{card};border-top:1px solid {border};display:flex;justify-content:space-around;align-items:center;padding:6px 0 20px;z-index:998;box-shadow:0 -2px 12px rgba(0,0,0,0.08);}}
-@media(min-width:640px){{.knav{{max-width:720px;}}}}
-.knav-item{{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 10px;min-width:56px;}}
-.knav-label{{font-size:0.6rem;font-weight:500;color:{muted};margin-top:1px;}}
-.knav-item.active .knav-label{{color:#1B4332;font-weight:700;}}
-.knav-fab{{width:50px;height:50px;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(27,67,50,0.38);margin-top:-20px;}}
-.knav-overlay{{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:76px;z-index:999;display:flex;pointer-events:none;}}
+/* NAV BAR - sticky top after header */
+.knav{position:sticky;top:57px;left:0;right:0;z-index:49;border-bottom:1px solid #E5E7EB;padding:0;}
+.knav-icons{display:flex;justify-content:space-around;align-items:center;padding:6px 0 8px;}
+.knav-item{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;cursor:pointer;}
+.knav-label{font-size:0.6rem;font-weight:500;color:#9CA3AF;}
+.knav-item.active .knav-label{color:#1B4332;font-weight:700;}
+.knav-fab{width:40px;height:40px;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(27,67,50,0.3);}
+.knav-scan{margin-top:-8px;}
+/* Hide streamlit nav buttons */
+section.main div[data-testid="stHorizontalBlock"]{display:flex!important;}
+section.main div[data-testid="stHorizontalBlock"] .stButton>button{opacity:0!important;height:54px!important;position:absolute!important;width:20%!important;cursor:pointer!important;border:none!important;background:transparent!important;box-shadow:none!important;}
+section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(1)>button{left:0%;}
+section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(2)>button{left:20%;}
+section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(3)>button{left:40%;}
+section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(4)>button{left:60%;}
+section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(5)>button{left:80%;}
+.block-container{padding:0 0 20px 0!important;max-width:520px!important;margin:0 auto!important;}}
 @media(min-width:640px){{.knav-overlay{{max-width:720px;}}}}
 .knav-overlay>div{{flex:1;pointer-events:all;}}
 .knav-overlay .stButton>button{{height:76px!important;opacity:0!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;width:100%!important;margin:0!important;padding:0!important;}}
@@ -106,65 +116,72 @@ def init_session_state():
             st.session_state[k] = v
 
 def render_header(show_avatar=True):
-    dark = st.session_state.get("dark_mode",False)
+    dark = st.session_state.get("dark_mode", False)
     name = ""
     if st.session_state.get("profile_data"): name = st.session_state["profile_data"].get("full_name","")
     elif st.session_state.get("user"): name = st.session_state["user"].get("email","U")
     initials = get_initials(name) if name else "G"
-    av = '<div class="kavatar">'+initials+"</div>" if show_avatar else ""
     card = "#242424" if dark else "#FFFFFF"
     border = "#333333" if dark else "#E5E7EB"
+    av = '<div class="kavatar">'+initials+"</div>" if show_avatar else ""
     st.markdown(
         '<div class="kheader" style="background:'+card+';border-bottom:1px solid '+border+';">'
-        '<div class="klogo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none">'
+        '<div class="klogo">'
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none">'
         '<path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" fill="#52B788" stroke="#1B4332" stroke-width="1.5" stroke-linejoin="round"/>'
-        '</svg>Kilimo <em>AI</em></div>'+av+"</div>",
+        '</svg>Kilimo <em>AI</em></div>'
+        +av+
+        '</div>',
         unsafe_allow_html=True)
 
+
 def render_bottom_nav():
-    dark = st.session_state.get("dark_mode",False)
-    page = st.session_state.get("page","home")
+    dark = st.session_state.get("dark_mode", False)
+    page = st.session_state.get("page", "home")
     card = "#242424" if dark else "#FFFFFF"
     border = "#333333" if dark else "#E5E7EB"
     muted = "#9CA3AF"
     active = "#1B4332"
     def s(p): return active if page==p else muted
-    def nc(p): return "knav-item active" if page==p else "knav-item"
+    def nc(p): return "active" if page==p else ""
+
     st.markdown(
-        '<div class="knav" style="background:'+card+';border-top:1px solid '+border+';">'
-        '<div class="'+nc("home")+'">'
+        '<div class="knav" style="background:'+card+';border-bottom:1px solid '+border+';">'
+        '<div class="knav-icons">'
+        '<div class="knav-item '+nc("home")+'">'
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
         '<path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="'+s("home")+'" stroke-width="2" stroke-linejoin="round"/>'
         '</svg><span class="knav-label">Home</span></div>'
-        '<div class="'+nc("history")+'">'
+        '<div class="knav-item '+nc("history")+'">'
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
         '<circle cx="12" cy="12" r="9" stroke="'+s("history")+'" stroke-width="2"/>'
         '<path d="M12 7V12L15 14" stroke="'+s("history")+'" stroke-width="2" stroke-linecap="round"/>'
         '</svg><span class="knav-label">History</span></div>'
-        '<div class="knav-item"><div class="knav-fab">'
-        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none">'
+        '<div class="knav-item knav-scan '+nc("scan")+'">'
+        '<div class="knav-fab">'
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none">'
         '<path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>'
         '<path d="M12 9V15M9 12H15" stroke="white" stroke-width="2" stroke-linecap="round"/>'
         '</svg></div><span class="knav-label">Scan</span></div>'
-        '<div class="'+nc("vets")+'">'
+        '<div class="knav-item '+nc("vets")+'">'
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
         '<path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" stroke="'+s("vets")+'" stroke-width="2"/>'
         '<path d="M12 7V11M10 9H14" stroke="'+s("vets")+'" stroke-width="2" stroke-linecap="round"/>'
         '</svg><span class="knav-label">Vets</span></div>'
-        '<div class="'+nc("profile")+'">'
+        '<div class="knav-item '+nc("profile")+'">'
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
         '<circle cx="12" cy="8" r="4" stroke="'+s("profile")+'" stroke-width="2"/>'
         '<path d="M4 20C4 17 7.58 14 12 14C16.42 14 20 17 20 20" stroke="'+s("profile")+'" stroke-width="2" stroke-linecap="round"/>'
         '</svg><span class="knav-label">Profile</span></div>'
-        '</div>',
+        '</div></div>',
         unsafe_allow_html=True)
     cols = st.columns(5)
-    nav_pages = [("home","Home"),("history","History"),("scan","Scan"),("vets","Vets"),("profile","Profile")]
-    for i,(p,label) in enumerate(nav_pages):
+    for i,(p,label) in enumerate([("home","Home"),("history","History"),("scan","Scan"),("vets","Vets"),("profile","Profile")]):
         with cols[i]:
             if st.button(label, key="nav_"+p, use_container_width=True):
                 st.session_state["page"] = p
                 st.rerun()
+
 
 def render_landing():
     dark = st.session_state.get("dark_mode",False)

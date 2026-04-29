@@ -57,16 +57,16 @@ html,body,[data-testid="stAppViewContainer"]{{font-family:'DM Sans',sans-serif;b
 .stTabs [data-baseweb="tab"]{{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:{muted}!important;}}
 .stTabs [aria-selected="true"]{{background:{card}!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;}}
 /* NAV BAR - sticky top after header */
-.knav{position:sticky;top:57px;left:0;right:0;z-index:49;border-bottom:1px solid #E5E7EB;padding:0;}
-.knav-icons{display:flex;justify-content:space-around;align-items:center;padding:6px 0 8px;}
-.knav-item{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;cursor:pointer;}
-.knav-label{font-size:0.6rem;font-weight:500;color:#9CA3AF;}
-.knav-item.active .knav-label{color:#1B4332;font-weight:700;}
-.knav-fab{width:40px;height:40px;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(27,67,50,0.3);}
-.knav-scan{margin-top:-8px;}
+.knav{{position:sticky;top:57px;left:0;right:0;z-index:49;border-bottom:1px solid #E5E7EB;padding:0;}}
+.knav-icons{{display:flex;justify-content:space-around;align-items:center;padding:6px 0 8px;}}
+.knav-item{{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;cursor:pointer;}}
+.knav-label{{font-size:0.6rem;font-weight:500;color:#9CA3AF;}}
+.knav-item.active .knav-label{{color:#1B4332;font-weight:700;}}
+.knav-fab{{width:40px;height:40px;background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(27,67,50,0.3);}}
+.knav-scan{{margin-top:-8px;}}
 /* Hide streamlit nav buttons */
-section.main div[data-testid="stHorizontalBlock"]{display:flex!important;}
-section.main div[data-testid="stHorizontalBlock"] .stButton>button{opacity:0!important;height:54px!important;position:absolute!important;width:20%!important;cursor:pointer!important;border:none!important;background:transparent!important;box-shadow:none!important;}
+section.main div[data-testid="stHorizontalBlock"]{{display:flex!important;}}
+section.main div[data-testid="stHorizontalBlock"] .stButton>button{{opacity:0!important;height:54px!important;position:absolute!important;width:20%!important;cursor:pointer!important;border:none!important;background:transparent!important;box-shadow:none!important;}}
 section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(1)>button{left:0%;}
 section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(2)>button{left:20%;}
 section.main div[data-testid="stHorizontalBlock"] .stButton:nth-child(3)>button{left:40%;}

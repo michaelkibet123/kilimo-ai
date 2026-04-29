@@ -66,41 +66,13 @@ html,body,[data-testid="stAppViewContainer"]{{font-family:'DM Sans',sans-serif;b
 @media(min-width:640px){{.knav-overlay{{max-width:720px;}}}}
 .knav-overlay>div{{flex:1;pointer-events:all;}}
 .knav-overlay .stButton>button{{height:76px!important;opacity:0!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;width:100%!important;margin:0!important;padding:0!important;}}
+div[data-testid="stHorizontalBlock"]{{position:fixed!important;bottom:0!important;left:50%!important;transform:translateX(-50%)!important;width:100%!important;max-width:480px!important;height:76px!important;z-index:1000!important;display:flex!important;padding:0!important;margin:0!important;background:transparent!important;gap:0!important;}}
+div[data-testid="stHorizontalBlock"] .stButton{{flex:1!important;padding:0!important;}}
+div[data-testid="stHorizontalBlock"] .stButton>button{{opacity:0!important;height:76px!important;width:100%!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;cursor:pointer!important;}}
 .kupload-btn{{background:{card};border:2px dashed #52B788;border-radius:14px;padding:28px 16px;text-align:center;margin:6px 0;cursor:pointer;}}
 .kupload-icon{{width:52px;height:52px;background:#F0FDF4;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.4rem;}}
 .ksetting-row{{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid {border};}}
 .ksetting-left{{display:flex;align-items:center;gap:10px;font-size:0.88rem;font-weight:500;color:{text};}}
-
-/* Hide nav button text, make transparent overlay */
-div[data-testid="stHorizontalBlock"]:has(button[kind="secondary"]) {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 100% !important;
-    max-width: 480px !important;
-    height: 76px !important;
-    z-index: 1000 !important;
-    display: flex !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: transparent !important;
-    gap: 0 !important;
-}
-div[data-testid="stHorizontalBlock"]:has(button[kind="secondary"]) .stButton {
-    flex: 1 !important;
-    padding: 0 !important;
-}
-div[data-testid="stHorizontalBlock"]:has(button[kind="secondary"]) .stButton > button {
-    opacity: 0 !important;
-    height: 76px !important;
-    width: 100% !important;
-    border-radius: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    cursor: pointer !important;
-}
 </style>"""
 
 def get_initials(name):

@@ -118,9 +118,16 @@ def render_history():
             "<div style='font-size:0.65rem;color:#166534;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;'>🟢 Healthy</div>"
             "</div>", unsafe_allow_html=True)
 
-    with filter_tabs[0]: filtered = scans
-    with filter_tabs[1]: filtered = diseased
-    with filter_tabs[2]: filtered = healthy
+    selected_tab = 0
+    with filter_tabs[0]:
+        filtered = scans
+        selected_tab = 0
+    with filter_tabs[1]:
+        filtered = diseased
+        selected_tab = 1
+    with filter_tabs[2]:
+        filtered = healthy
+        selected_tab = 2
 
     if search:
         filtered = [s for s in filtered if

@@ -60,7 +60,7 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .kupload-icon{width:48px;height:48px;background:#F0FDF4;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:1.3rem;}
 .stButton>button{font-family:'DM Sans',sans-serif!important;font-weight:600!important;border-radius:12px!important;height:48px!important;font-size:0.9rem!important;}
 .stButton>button[kind="primary"]{background:linear-gradient(135deg,#1B4332,#2D6A4F)!important;border:none!important;box-shadow:0 3px 10px rgba(27,67,50,0.22)!important;color:white!important;}
-.stButton>button[kind="secondary"]{background:"""+card+"""!important;border:1.5px solid """+border+"""!important;color:"""+text+"""!important;}
+.stButton>button[kind="secondary"]{background:"""+card+"""!important;border:1.5px solid """+border+"""!important;color:"""+text+"""!important;}.stDownloadButton>button{background:"""+card+"""!important;color:"""+text+"""!important;border:1.5px solid """+border+"""!important;border-radius:12px!important;font-family:'DM Sans',sans-serif!important;font-weight:600!important;height:48px!important;}
 .stTextInput>div>div>input{border-radius:10px!important;border:1.5px solid """+border+"""!important;font-family:'DM Sans',sans-serif!important;background:"""+input_bg+"""!important;color:"""+text+"""!important;}
 .stTabs [data-baseweb="tab-list"]{background:"""+tab_bg+""";border-radius:10px;padding:3px;}
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:"""+muted+"""!important;}

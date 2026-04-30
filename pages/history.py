@@ -5,33 +5,13 @@ from datetime import datetime, timezone
 def render_bottom_nav():
     dark = st.session_state.get("dark_mode", False)
     page = st.session_state.get("page", "home")
-    card = "#242424" if dark else "#FFFFFF"
-    border = "#333333" if dark else "#E5E7EB"
-    muted = "#9CA3AF"
-    active = "#1B4332"
-    def s(p): return active if page==p else muted
-    def bg(p): return "linear-gradient(135deg,#1B4332,#2D6A4F)" if p=="scan" else "transparent"
-    def tc(p): return "white" if p=="scan" else (active if page==p else muted)
-    def mt(p): return "margin-top:-10px;" if p=="scan" else ""
-    def br(p): return "border-radius:12px;" if p=="scan" else ""
-    def bs(p): return "box-shadow:0 3px 10px rgba(27,67,50,0.3);" if p=="scan" else ""
-    icons = {"home":"🏠","history":"🕐","scan":"🌿","vets":"📍","profile":"👤"}
-    labels = {"home":"Home","history":"History","scan":"Scan","vets":"Vets","profile":"Profile"}
-    st.markdown(
-        "<div style='position:sticky;bottom:0;left:0;right:0;z-index:999;background:"+card+";border-top:1px solid "+border+";box-shadow:0 -2px 12px rgba(0,0,0,0.06);padding:0;'>"
-        "<div style='display:flex;width:100%;'>",
-        unsafe_allow_html=True)
-    pages = ["home","history","scan","vets","profile"]
-    for p in pages:
-        clicked = st.button(
-            icons[p]+"\n"+labels[p],
-            key="nav_"+p+"_hist",
-            use_container_width=True
-        )
-        if clicked:
-            st.session_state["page"] = p
-            st.rerun()
-    st.markdown("</div></div>", unsafe_allow_html=True)
+    pages = [("home","🏠","Home"),("history","🕐","History"),("scan","🌿","Scan"),("vets","📍","Vets"),("profile","👤","Profile")]
+    cols = st.columns(5, gap="small")
+    for i,(p,icon,label) in enumerate(pages):
+        with cols[i]:
+            if st.button(icon+"\n"+label, key="nav_"+p+"_hist", use_container_width=True):
+                st.session_state["page"] = p
+                st.rerun()
 
 
 def render_history():

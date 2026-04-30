@@ -70,6 +70,36 @@ div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bott
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:56px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.55rem!important;font-weight:500!important;line-height:1.3!important;white-space:pre-wrap!important;width:100%!important;padding:2px 0!important;overflow:hidden!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button:hover{color:#1B4332!important;background:transparent!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton:nth-child(3)>button{background:linear-gradient(135deg,#1B4332,#2D6A4F)!important;color:white!important;border-radius:14px!important;margin-top:-12px!important;height:52px!important;box-shadow:0 4px 14px rgba(27,67,50,0.35)!important;font-weight:700!important;}
+
+/* FORCE NAV HORIZONTAL */
+section.main > div > div > div > div:last-child > div[data-testid="stHorizontalBlock"] {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 999 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+}
+section.main > div > div > div > div:last-child > div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 20vw !important;
+    padding: 0 !important;
+}
+section.main > div > div > div > div:last-child > div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
+    width: 100% !important;
+    height: 56px !important;
+    font-size: 0.55rem !important;
+    white-space: pre-wrap !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #9CA3AF !important;
+    padding: 2px 0 !important;
+}
 </style>"""
     return css
 
@@ -127,33 +157,13 @@ def render_header(show_avatar=True):
 def render_bottom_nav():
     dark = st.session_state.get("dark_mode", False)
     page = st.session_state.get("page", "home")
-    card = "#242424" if dark else "#FFFFFF"
-    border = "#333333" if dark else "#E5E7EB"
-    muted = "#9CA3AF"
-    active = "#1B4332"
-    def s(p): return active if page==p else muted
-    def bg(p): return "linear-gradient(135deg,#1B4332,#2D6A4F)" if p=="scan" else "transparent"
-    def tc(p): return "white" if p=="scan" else (active if page==p else muted)
-    def mt(p): return "margin-top:-10px;" if p=="scan" else ""
-    def br(p): return "border-radius:12px;" if p=="scan" else ""
-    def bs(p): return "box-shadow:0 3px 10px rgba(27,67,50,0.3);" if p=="scan" else ""
-    icons = {"home":"🏠","history":"🕐","scan":"🌿","vets":"📍","profile":"👤"}
-    labels = {"home":"Home","history":"History","scan":"Scan","vets":"Vets","profile":"Profile"}
-    st.markdown(
-        "<div style='position:sticky;bottom:0;left:0;right:0;z-index:999;background:"+card+";border-top:1px solid "+border+";box-shadow:0 -2px 12px rgba(0,0,0,0.06);padding:0;'>"
-        "<div style='display:flex;width:100%;'>",
-        unsafe_allow_html=True)
-    pages = ["home","history","scan","vets","profile"]
-    for p in pages:
-        clicked = st.button(
-            icons[p]+"\n"+labels[p],
-            key="nav_"+p+"_main",
-            use_container_width=True
-        )
-        if clicked:
-            st.session_state["page"] = p
-            st.rerun()
-    st.markdown("</div></div>", unsafe_allow_html=True)
+    pages = [("home","🏠","Home"),("history","🕐","History"),("scan","🌿","Scan"),("vets","📍","Vets"),("profile","👤","Profile")]
+    cols = st.columns(5, gap="small")
+    for i,(p,icon,label) in enumerate(pages):
+        with cols[i]:
+            if st.button(icon+"\n"+label, key="nav_"+p+"_main", use_container_width=True):
+                st.session_state["page"] = p
+                st.rerun()
 
 
 def render_landing():

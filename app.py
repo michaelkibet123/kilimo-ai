@@ -16,8 +16,8 @@ def get_css(dark=False):
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&display=swap');
 html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;background:"""+bg+""";color:"""+text+""";}
 #MainMenu,footer,header,[data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"],[data-testid="collapsedControl"],section[data-testid="stSidebar"]{display:none!important;}
-[data-testid="stAppViewContainer"]>.main{background:"""+bg+"""!important;padding:0!important;}
-.block-container{max-width:520px!important;margin:0 auto!important;padding:0 0 20px 0!important;background:"""+bg+"""!important;}
+[data-testid="stAppViewContainer"]>.main{background:"""+bg+"""!important;padding:0!important;}[data-testid="column"]{min-width:0!important;flex:1!important;}
+.block-container{max-width:520px!important;margin:0 auto!important;padding:0!important;background:"""+bg+"""!important;}
 @media(min-width:640px){.block-container{max-width:720px!important;padding:0 20px 20px!important;}}
 .kheader{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:"""+card+""";border-bottom:1px solid """+border+""";position:sticky;top:0;z-index:50;}
 .klogo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#1B4332;display:flex;align-items:center;gap:6px;}
@@ -66,7 +66,7 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:"""+muted+"""!important;}
 .stTabs [aria-selected="true"]{background:"""+card+"""!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;}
 /* Nav bar styling */
-div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:"""+card+"""!important;border-top:1px solid """+border+"""!important;padding:4px 0 18px!important;margin:0!important;gap:0!important;box-shadow:0 -2px 12px rgba(0,0,0,0.06)!important;display:flex!important;flex-direction:row!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:"""+card+"""!important;border-top:1px solid """+border+"""!important;padding:4px 0 18px!important;margin:0!important;gap:0!important;box-shadow:0 -2px 12px rgba(0,0,0,0.06)!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:56px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.6rem!important;font-weight:500!important;line-height:1.4!important;white-space:pre-wrap!important;width:100%!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button:hover{color:#1B4332!important;background:transparent!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton:nth-child(3)>button{background:linear-gradient(135deg,#1B4332,#2D6A4F)!important;color:white!important;border-radius:14px!important;margin-top:-12px!important;height:52px!important;box-shadow:0 4px 14px rgba(27,67,50,0.35)!important;font-weight:700!important;}
@@ -144,34 +144,37 @@ def render_bottom_nav():
 
 
 def render_landing():
-    dark = st.session_state.get("dark_mode",False)
+    dark = st.session_state.get("dark_mode", False)
     bg = "#1A1A1A" if dark else "#EEF2EE"
-    st.markdown('<div class="klanding" style="background:'+bg+';">', unsafe_allow_html=True)
-    st.markdown('<div class="kleaf">🌿</div>', unsafe_allow_html=True)
-    st.markdown('<div class="klanding-logo">Kilimo AI</div>', unsafe_allow_html=True)
-    st.markdown('<div class="klanding-tag">Diagnose · Treat · Protect</div>', unsafe_allow_html=True)
+    muted = "#9CA3AF"
+    st.markdown(
+        "<div style='text-align:center;padding:32px 24px 0;'>"
+        "<div style='width:56px;height:56px;background:linear-gradient(135deg,#1B4332,#52B788);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 4px 16px rgba(27,67,50,0.28);margin:0 auto;'>🌿</div>"
+        "<div style='font-family:DM Serif Display,serif;font-size:2rem;color:#1B4332;margin:10px 0 4px;line-height:1;'>Kilimo AI</div>"
+        "<div style='font-size:0.72rem;color:"+muted+";letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;'>Diagnose · Treat · Protect</div>"
+        "</div>", unsafe_allow_html=True)
     if st.button("Get Started", use_container_width=True, type="primary"):
         st.session_state["show_landing"] = False
         st.session_state["auth_mode"] = "signup"
         st.rerun()
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
     if st.button("Log In", use_container_width=True):
         st.session_state["show_landing"] = False
         st.session_state["auth_mode"] = "login"
         st.rerun()
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
     if st.button("Continue as Guest", use_container_width=True):
         st.session_state["guest"] = True
         st.session_state["show_landing"] = False
         st.session_state["page"] = "scan"
         st.rerun()
     st.markdown(
-        "<div style='display:flex;justify-content:center;gap:24px;margin-top:28px;'>"
-        "<div style='text-align:center;font-size:0.72rem;color:#9CA3AF;'><div style='font-size:1.2rem;margin-bottom:4px;'>🔒</div>Secure</div>"
-        "<div style='text-align:center;font-size:0.72rem;color:#9CA3AF;'><div style='font-size:1.2rem;margin-bottom:4px;'>🇰🇪</div>Kenya First</div>"
-        "<div style='text-align:center;font-size:0.72rem;color:#9CA3AF;'><div style='font-size:1.2rem;margin-bottom:4px;'>⚡</div>Instant AI</div>"
+        "<div style='display:flex;justify-content:center;gap:24px;margin-top:20px;padding:0 24px;'>"
+        "<div style='text-align:center;font-size:0.7rem;color:"+muted+";'><div style='font-size:1.1rem;margin-bottom:3px;'>🔒</div>Secure</div>"
+        "<div style='text-align:center;font-size:0.7rem;color:"+muted+";'><div style='font-size:1.1rem;margin-bottom:3px;'>🇰🇪</div>Kenya First</div>"
+        "<div style='text-align:center;font-size:0.7rem;color:"+muted+";'><div style='font-size:1.1rem;margin-bottom:3px;'>⚡</div>Instant AI</div>"
         "</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+
 
 def render_auth():
     render_header(show_avatar=False)

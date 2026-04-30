@@ -47,9 +47,9 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .bsevere{background:#FEE2E2;color:#DC2626;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;display:inline-block;}
 .bmoderate{background:#FEF3C7;color:#D97706;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;display:inline-block;}
 .bhealthy{background:#D1FAE5;color:#059669;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;display:inline-block;}
-.klanding{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:16px 24px;text-align:center;background:"""+bg+""";}
-.klanding-logo{font-family:'DM Serif Display',serif;font-size:2.8rem;color:#1B4332;margin:16px 0 6px;line-height:1;}
-.klanding-tag{font-size:0.78rem;color:"""+muted+""";letter-spacing:0.12em;text-transform:uppercase;margin-bottom:32px;}
+.klanding{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:0 24px;text-align:center;background:"""+bg+""";}
+.klanding-logo{font-family:'DM Serif Display',serif;font-size:2.4rem;color:#1B4332;margin:12px 0 4px;line-height:1;}
+.klanding-tag{font-size:0.78rem;color:"""+muted+""";letter-spacing:0.12em;text-transform:uppercase;margin-bottom:24px;}
 .kleaf{width:72px;height:72px;background:linear-gradient(135deg,#1B4332,#52B788);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 6px 24px rgba(27,67,50,0.28);margin:0 auto;}
 .kprofile-hero{background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:16px;padding:20px 16px;margin:10px 12px;color:white;}
 .kprofile-stats{display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;margin-top:14px;}

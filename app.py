@@ -48,9 +48,9 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .bmoderate{background:#FEF3C7;color:#D97706;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;display:inline-block;}
 .bhealthy{background:#D1FAE5;color:#059669;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;display:inline-block;}
 .klanding{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:0 24px;text-align:center;background:"""+bg+""";}
-.klanding-logo{font-family:'DM Serif Display',serif;font-size:2.4rem;color:#1B4332;margin:12px 0 4px;line-height:1;}
-.klanding-tag{font-size:0.78rem;color:"""+muted+""";letter-spacing:0.12em;text-transform:uppercase;margin-bottom:24px;}
-.kleaf{width:72px;height:72px;background:linear-gradient(135deg,#1B4332,#52B788);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 6px 24px rgba(27,67,50,0.28);margin:0 auto;}
+.klanding-logo{font-family:'DM Serif Display',serif;font-size:2rem;color:#1B4332;margin:8px 0 4px;line-height:1;}
+.klanding-tag{font-size:0.72rem;color:"""+muted+""";letter-spacing:0.1em;text-transform:uppercase;margin-bottom:16px;}
+.kleaf{width:60px;height:60px;background:linear-gradient(135deg,#1B4332,#52B788);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 4px 16px rgba(27,67,50,0.28);margin:0 auto;}
 .kprofile-hero{background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:16px;padding:20px 16px;margin:10px 12px;color:white;}
 .kprofile-stats{display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;margin-top:14px;}
 .kprofile-stat{padding:10px 6px;text-align:center;}
@@ -66,8 +66,8 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:"""+muted+"""!important;}
 .stTabs [aria-selected="true"]{background:"""+card+"""!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;}
 /* Nav bar styling */
-div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:"""+card+"""!important;border-top:1px solid """+border+"""!important;padding:4px 0 18px!important;margin:0!important;gap:0!important;box-shadow:0 -2px 12px rgba(0,0,0,0.06)!important;}
-div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:56px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.6rem!important;font-weight:500!important;line-height:1.4!important;white-space:pre-wrap!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:"""+card+"""!important;border-top:1px solid """+border+"""!important;padding:4px 0 18px!important;margin:0!important;gap:0!important;box-shadow:0 -2px 12px rgba(0,0,0,0.06)!important;display:flex!important;flex-direction:row!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:56px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.6rem!important;font-weight:500!important;line-height:1.4!important;white-space:pre-wrap!important;width:100%!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button:hover{color:#1B4332!important;background:transparent!important;}
 div[data-testid="stHorizontalBlock"]:last-of-type .stButton:nth-child(3)>button{background:linear-gradient(135deg,#1B4332,#2D6A4F)!important;color:white!important;border-radius:14px!important;margin-top:-12px!important;height:52px!important;box-shadow:0 4px 14px rgba(27,67,50,0.35)!important;font-weight:700!important;}
 </style>"""

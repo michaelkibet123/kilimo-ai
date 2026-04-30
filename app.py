@@ -65,8 +65,10 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .stTabs [data-baseweb="tab-list"]{background:"""+tab_bg+""";border-radius:10px;padding:3px;}
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:"""+muted+"""!important;}
 .stTabs [aria-selected="true"]{background:"""+card+"""!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;}
-/* Hide streamlit nav buttons row */
-div[data-testid="stHorizontalBlock"]:last-of-type{opacity:0!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;position:absolute!important;}
+/* Nav bar styling */
+div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:white!important;border-top:1px solid #E5E7EB!important;padding:6px 0 16px!important;margin:0!important;gap:0!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:52px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.65rem!important;font-weight:500!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button:hover{background:#F0FDF4!important;color:#1B4332!important;}
 </style>"""
     return css
 
@@ -131,36 +133,7 @@ def render_bottom_nav():
     def s(p): return active if page==p else muted
     def nc(p): return "active" if page==p else ""
 
-    st.markdown(
-        '<div class="knav" style="background:'+card+';border-bottom:1px solid '+border+';">'
-        '<div class="knav-icons">'
-        '<div class="knav-item '+nc("home")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="'+s("home")+'" stroke-width="2" stroke-linejoin="round"/>'
-        '</svg><span class="knav-label">Home</span></div>'
-        '<div class="knav-item '+nc("history")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<circle cx="12" cy="12" r="9" stroke="'+s("history")+'" stroke-width="2"/>'
-        '<path d="M12 7V12L15 14" stroke="'+s("history")+'" stroke-width="2" stroke-linecap="round"/>'
-        '</svg><span class="knav-label">History</span></div>'
-        '<div class="knav-item knav-scan '+nc("scan")+'">'
-        '<div class="knav-fab">'
-        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none">'
-        '<path d="M12 3C10.5 6 7 7.5 3 7.5C3 14 7 19.5 12 21C17 19.5 21 14 21 7.5C17 7.5 13.5 6 12 3Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>'
-        '<path d="M12 9V15M9 12H15" stroke="white" stroke-width="2" stroke-linecap="round"/>'
-        '</svg></div><span class="knav-label">Scan</span></div>'
-        '<div class="knav-item '+nc("vets")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" stroke="'+s("vets")+'" stroke-width="2"/>'
-        '<path d="M12 7V11M10 9H14" stroke="'+s("vets")+'" stroke-width="2" stroke-linecap="round"/>'
-        '</svg><span class="knav-label">Vets</span></div>'
-        '<div class="knav-item '+nc("profile")+'">'
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-        '<circle cx="12" cy="8" r="4" stroke="'+s("profile")+'" stroke-width="2"/>'
-        '<path d="M4 20C4 17 7.58 14 12 14C16.42 14 20 17 20 20" stroke="'+s("profile")+'" stroke-width="2" stroke-linecap="round"/>'
-        '</svg><span class="knav-label">Profile</span></div>'
-        '</div></div>',
-        unsafe_allow_html=True)
+    
     cols = st.columns(5)
     for i,(p,label) in enumerate([("home","Home"),("history","History"),("scan","Scan"),("vets","Vets"),("profile","Profile")]):
         with cols[i]:

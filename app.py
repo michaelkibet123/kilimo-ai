@@ -66,9 +66,10 @@ html,body,[data-testid="stAppViewContainer"]{font-family:'DM Sans',sans-serif;ba
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:0.82rem!important;color:"""+muted+"""!important;}
 .stTabs [aria-selected="true"]{background:"""+card+"""!important;color:#1B4332!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;}
 /* Nav bar styling */
-div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:white!important;border-top:1px solid #E5E7EB!important;padding:6px 0 16px!important;margin:0!important;gap:0!important;}
-div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:52px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.65rem!important;font-weight:500!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;}
-div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button:hover{background:#F0FDF4!important;color:#1B4332!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type{position:sticky!important;bottom:0!important;left:0!important;right:0!important;z-index:999!important;background:white!important;border-top:1px solid #E5E7EB!important;padding:4px 0 18px!important;margin:0!important;gap:0!important;box-shadow:0 -2px 12px rgba(0,0,0,0.06)!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button{height:56px!important;border-radius:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#9CA3AF!important;font-size:0.6rem!important;font-weight:500!important;line-height:1.4!important;white-space:pre-wrap!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type .stButton>button:hover{color:#1B4332!important;background:transparent!important;}
+div[data-testid="stHorizontalBlock"]:last-of-type .stButton:nth-child(3)>button{background:linear-gradient(135deg,#1B4332,#2D6A4F)!important;color:white!important;border-radius:14px!important;margin-top:-12px!important;height:52px!important;box-shadow:0 4px 14px rgba(27,67,50,0.35)!important;font-weight:700!important;}
 </style>"""
     return css
 
@@ -135,7 +136,7 @@ def render_bottom_nav():
 
     
     cols = st.columns(5)
-    for i,(p,label) in enumerate([("home","Home"),("history","History"),("scan","Scan"),("vets","Vets"),("profile","Profile")]):
+    for i,(p,label) in enumerate([("home","🏠\nHome"),("history","🕐\nHistory"),("scan","🌿\nScan"),("vets","📍\nVets"),("profile","👤\nProfile")]):
         with cols[i]:
             if st.button(label, key="nav_"+p, use_container_width=True):
                 st.session_state["page"] = p

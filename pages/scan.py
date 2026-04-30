@@ -23,7 +23,7 @@ def render_bottom_nav():
     def nc(p): return "active" if page==p else ""
     
     cols = st.columns(5)
-    for i,(p,label) in enumerate([("home","Home"),("history","History"),("scan","Scan"),("vets","Vets"),("profile","Profile")]):
+    for i,(p,label) in enumerate([("home","🏠\nHome"),("history","🕐\nHistory"),("scan","🌿\nScan"),("vets","📍\nVets"),("profile","👤\nProfile")]):
         with cols[i]:
             if st.button(label, key="nav_"+p+"_scan", use_container_width=True):
                 st.session_state["page"] = p

@@ -132,15 +132,28 @@ def render_bottom_nav():
     muted = "#9CA3AF"
     active = "#1B4332"
     def s(p): return active if page==p else muted
-    def nc(p): return "active" if page==p else ""
-
-    
-    cols = st.columns(5)
-    for i,(p,label) in enumerate([("home","🏠\nHome"),("history","🕐\nHistory"),("scan","🌿\nScan"),("vets","📍\nVets"),("profile","👤\nProfile")]):
-        with cols[i]:
-            if st.button(label, key="nav_"+p, use_container_width=True):
-                st.session_state["page"] = p
-                st.rerun()
+    def bg(p): return "linear-gradient(135deg,#1B4332,#2D6A4F)" if p=="scan" else "transparent"
+    def tc(p): return "white" if p=="scan" else (active if page==p else muted)
+    def mt(p): return "margin-top:-10px;" if p=="scan" else ""
+    def br(p): return "border-radius:12px;" if p=="scan" else ""
+    def bs(p): return "box-shadow:0 3px 10px rgba(27,67,50,0.3);" if p=="scan" else ""
+    icons = {"home":"🏠","history":"🕐","scan":"🌿","vets":"📍","profile":"👤"}
+    labels = {"home":"Home","history":"History","scan":"Scan","vets":"Vets","profile":"Profile"}
+    st.markdown(
+        "<div style='position:sticky;bottom:0;left:0;right:0;z-index:999;background:"+card+";border-top:1px solid "+border+";box-shadow:0 -2px 12px rgba(0,0,0,0.06);padding:0;'>"
+        "<div style='display:flex;width:100%;'>",
+        unsafe_allow_html=True)
+    pages = ["home","history","scan","vets","profile"]
+    for p in pages:
+        clicked = st.button(
+            icons[p]+"\n"+labels[p],
+            key="nav_"+p+"_main",
+            use_container_width=True
+        )
+        if clicked:
+            st.session_state["page"] = p
+            st.rerun()
+    st.markdown("</div></div>", unsafe_allow_html=True)
 
 
 def render_landing():

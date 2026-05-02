@@ -117,7 +117,30 @@ section.main > div > div > div > div:last-child > div[data-testid="stHorizontalB
     min-width: 0 !important;
     overflow: hidden !important;
 }
-</style>"""
+</style>
+<script>
+function fixNav() {
+    var radios = document.querySelectorAll('[data-testid="stRadio"]');
+    radios.forEach(function(radio) {
+        radio.style.cssText = 'position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:9999!important;background:white!important;border-top:1px solid #E5E7EB!important;padding:8px 0 18px!important;box-shadow:0 -2px 12px rgba(0,0,0,0.08)!important;margin:0!important;';
+        var labels = radio.querySelectorAll('label');
+        labels.forEach(function(label) {
+            var input = label.querySelector('input');
+            var circle = label.querySelector('div');
+            if(circle) circle.style.display = 'none';
+            label.style.cssText = 'flex:1!important;text-align:center!important;font-size:0.72rem!important;font-weight:500!important;color:#9CA3AF!important;cursor:pointer!important;transition:color 0.2s!important;';
+            if(input && input.checked) {
+                label.style.color = '#1B4332';
+                label.style.fontWeight = '700';
+            }
+        });
+        var container = document.querySelector('.block-container');
+        if(container) container.style.paddingBottom = '80px';
+    });
+}
+setInterval(fixNav, 300);
+</script>
+"""
     return css
 
 

@@ -100,6 +100,23 @@ section.main > div > div > div > div:last-child > div[data-testid="stHorizontalB
     color: #9CA3AF !important;
     padding: 2px 0 !important;
 }
+
+[data-testid="stAppViewContainer"] .stHorizontalBlock {
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+}
+[data-testid="stAppViewContainer"] .stHorizontalBlock [data-testid="column"] {
+    min-width: 0 !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+}
+[data-testid="stAppViewContainer"] .stHorizontalBlock [data-testid="column"] button {
+    padding: 2px 1px !important;
+    font-size: 0.5rem !important;
+    white-space: pre-line !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
 </style>"""
     return css
 

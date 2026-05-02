@@ -87,17 +87,15 @@ def render_scan():
         st.session_state["selected_crop"] = "Maize"
 
     st.markdown("<div style='padding:0 12px 8px;font-size:0.8rem;font-weight:600;color:"+muted+";'>SELECT CROP</div>", unsafe_allow_html=True)
-    cols = st.columns(4)
-    for i,crop in enumerate(crops):
-        with cols[i]:
-            selected = st.session_state["selected_crop"] == crop
-            if st.button(crop, key="crop_"+crop, type="primary" if selected else "secondary", use_container_width=True):
-                st.session_state["selected_crop"] = crop
-                st.session_state["scan_result"] = None
-                st.session_state["uploaded_image"] = None
-                st.session_state["original_bytes"] = None
-                st.session_state["heatmap_bytes"] = None
-                st.rerun()
+    selected_crop = st.radio("crop", crops, index=crops.index(st.session_state["selected_crop"]),
+        horizontal=True, label_visibility="collapsed", key="crop_radio")
+    if selected_crop != st.session_state["selected_crop"]:
+        st.session_state["selected_crop"] = selected_crop
+        st.session_state["scan_result"] = None
+        st.session_state["uploaded_image"] = None
+        st.session_state["original_bytes"] = None
+        st.session_state["heatmap_bytes"] = None
+        st.rerun()
 
     if not st.session_state.get("scan_result"):
         st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)

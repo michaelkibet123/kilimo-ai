@@ -13,14 +13,16 @@ def render_header():
 
 def render_bottom_nav():
     dark = st.session_state.get("dark_mode", False)
-    page = st.session_state.get("page", "home")
-    pages = [("home","🏠","Home"),("history","🕐","History"),("scan","🌿","Scan"),("vets","📍","Vets"),("profile","👤","Profile")]
-    cols = st.columns(5, gap="small")
-    for i,(p,icon,label) in enumerate(pages):
-        with cols[i]:
-            if st.button(icon+"\n"+label, key="nav_"+p+"_prof", use_container_width=True):
-                st.session_state["page"] = p
-                st.rerun()
+    card = "#242424" if dark else "#FFFFFF"
+    border = "#333333" if dark else "#E5E7EB"
+    pages = {"🏠 Home":"home","🕐 History":"history","🌿 Scan":"scan","📍 Vets":"vets","👤 Profile":"profile"}
+    current = st.session_state.get("page","home")
+    current_label = next((k for k,v in pages.items() if v==current), "🏠 Home")
+    selected = st.radio("nav", list(pages.keys()), index=list(pages.keys()).index(current_label),
+        horizontal=True, label_visibility="collapsed", key="nav_radio_prof")
+    if pages[selected] != st.session_state.get("page","home"):
+        st.session_state["page"] = pages[selected]
+        st.rerun()
 
 
 def render_profile():
